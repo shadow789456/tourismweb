@@ -12,7 +12,8 @@ import {
   Mountain,
   TrendingUp,
   Activity,
-  Zap
+  Zap,
+  Users
 } from 'lucide-react';
 
 interface Update {
