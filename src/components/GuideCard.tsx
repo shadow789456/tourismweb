@@ -6,9 +6,10 @@ import { Guide } from '../data/guides';
 interface GuideCardProps {
   guide: Guide;
   index: number;
+  onDetailsClick: (guide: Guide) => void;
 }
 
-const GuideCard: React.FC<GuideCardProps> = ({ guide, index }) => {
+const GuideCard: React.FC<GuideCardProps> = ({ guide, index, onDetailsClick }) => {
   const getAvailabilityColor = (availability: string) => {
     switch (availability) {
       case 'Available': return 'text-green-600 bg-green-100';
@@ -99,18 +100,28 @@ const GuideCard: React.FC<GuideCardProps> = ({ guide, index }) => {
           <div className="text-lg font-bold text-gray-900">
             ${guide.pricePerDay}/day
           </div>
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            disabled={guide.availability === 'Booked'}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
-              guide.availability === 'Booked'
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-red-600 hover:bg-red-700 text-white'
-            }`}
-          >
-            {guide.availability === 'Booked' ? 'Unavailable' : 'Book Now'}
-          </motion.button>
+          <div className="flex gap-2">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => onDetailsClick(guide)}
+              className="px-3 py-2 rounded-lg font-medium transition-colors duration-200 bg-gray-200 hover:bg-gray-300 text-gray-700"
+            >
+              Details
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              disabled={guide.availability === 'Booked'}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
+                guide.availability === 'Booked'
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-red-600 hover:bg-red-700 text-white'
+              }`}
+            >
+              {guide.availability === 'Booked' ? 'Unavailable' : 'Book'}
+            </motion.button>
+          </div>
         </div>
       </div>
     </motion.div>

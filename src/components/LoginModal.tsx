@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
+import { X, Mail, Lock, User, Eye, EyeOff, Chrome, Facebook, Github } from 'lucide-react';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -38,14 +38,15 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4"
           onClick={onClose}
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.8, y: 50 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8"
+            exit={{ opacity: 0, scale: 0.8, y: 50 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl max-w-md w-full p-8 border border-white/20"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
@@ -180,12 +181,33 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               </div>
 
               <div className="mt-4 grid grid-cols-2 gap-3">
-                <button className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <Chrome className="h-4 w-4 mr-2 text-red-500" />
                   <span className="text-sm font-medium text-gray-700">Google</span>
-                </button>
-                <button className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <Facebook className="h-4 w-4 mr-2 text-blue-600" />
                   <span className="text-sm font-medium text-gray-700">Facebook</span>
-                </button>
+                </motion.button>
+              </div>
+              
+              <div className="mt-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <Github className="h-4 w-4 mr-2 text-gray-700" />
+                  <span className="text-sm font-medium text-gray-700">Continue with GitHub</span>
+                </motion.button>
               </div>
             </div>
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Filter, Star } from 'lucide-react';
 import GuideCard from './GuideCard';
+import GuideModal from './GuideModal';
 import { guides } from '../data/guides';
 
 const Guides: React.FC = () => {
@@ -9,6 +10,9 @@ const Guides: React.FC = () => {
   const [selectedSpecialization, setSelectedSpecialization] = useState('All');
   const [selectedAvailability, setSelectedAvailability] = useState('All');
   const [sortBy, setSortBy] = useState('rating');
+  const [selectedGuide, setSelectedGuide] = useState<typeof guides[0] | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [relatedGuides, setRelatedGuides] = useState<typeof guides>([]);
 
   const specializations = ['All', ...Array.from(new Set(guides.flatMap(guide => guide.specialization)))];
   const availabilities = ['All', 'Available', 'Busy', 'Booked'];
@@ -36,6 +40,24 @@ const Guides: React.FC = () => {
           return 0;
       }
     });
+
+  const handleDetailsClick = (guide: typeof guides[0]) => {
+    setSelectedGuide(guide);
+    setIsModalOpen(true);
+    
+    // Find related guides with similar specializations
+    const related = guides.filter(g => 
+      g.id !== guide.id && 
+      g.specialization.some(spec => guide.specialization.includes(spec))
+    ).slice(0, 3);
+    setRelatedGuides(related);
+  };
+
+  const handleBookNow = (guide: typeof guides[0]) => {
+    // Handle booking logic here
+    console.log('Booking guide:', guide.name);
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -135,7 +157,12 @@ const Guides: React.FC = () => {
         {/* Guides Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredGuides.map((guide, index) => (
-            <GuideCard key={guide.id} guide={guide} index={index} />
+            <GuideCard 
+              key={guide.id} 
+              guide={guide} 
+              index={index} 
+              onDetailsClick={handleDetailsClick}
+            />
           ))}
         </div>
 
@@ -185,6 +212,34 @@ const Guides: React.FC = () => {
           </div>
         </motion.section>
       </div>
+
+      <GuideModal 
+        guide={selectedGuide}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onBookNow={handleBookNow}
+      />
+      
+      {/* Related Guides Section in Modal */}
+      {isModalOpen && relatedGuides.length > 0 && (
+        <div className="fixed bottom-4 right-4 z-60">
+          <div className="bg-white rounded-lg shadow-lg p-4 max-w-sm">
+            <h4 className="font-semibold text-gray-900 mb-2">Similar Guides</h4>
+            <div className="space-y-2">
+              {relatedGuides.map((guide) => (
+                <div key={guide.id} className="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded cursor-pointer"
+                     onClick={() => handleDetailsClick(guide)}>
+                  <img src={guide.image} alt={guide.name} className="w-8 h-8 rounded-full object-cover" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">{guide.name}</p>
+                    <p className="text-xs text-gray-500">{guide.specialization[0]}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
