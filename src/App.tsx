@@ -6,6 +6,7 @@ import Destinations from './components/Destinations';
 import Culture from './components/Culture';
 import Guides from './components/Guides';
 import LiveUpdates from './components/LiveUpdates';
+import SpecialAccess from './components/SpecialAccess';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/culture" element={<Culture />} />
           <Route path="/guides" element={<Guides />} />
           <Route path="/updates" element={<LiveUpdates />} />
+          <Route path="/special-access" element={<SpecialAccess />} />
         </Routes>
       </div>
     </Router>

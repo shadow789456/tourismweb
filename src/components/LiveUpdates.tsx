@@ -9,7 +9,10 @@ import {
   Clock,
   MapPin,
   Wifi,
-  Mountain
+  Mountain,
+  TrendingUp,
+  Activity,
+  Zap
 } from 'lucide-react';
 
 interface Update {
@@ -31,6 +34,12 @@ interface Update {
 const LiveUpdates: React.FC = () => {
   const [updates, setUpdates] = useState<Update[]>([]);
   const [selectedLocation, setSelectedLocation] = useState('All');
+  const [liveStats, setLiveStats] = useState({
+    totalTravelers: 1247,
+    activeGuides: 89,
+    weatherAlerts: 3,
+    trailsOpen: 156
+  });
 
   const locations = ['All', 'Everest Region', 'Annapurna Region', 'Kathmandu Valley', 'Pokhara', 'Chitwan'];
 
@@ -95,6 +104,16 @@ const LiveUpdates: React.FC = () => {
     const interval = setInterval(() => {
       const newUpdate = generateUpdate();
       setUpdates(prev => [newUpdate, ...prev.slice(0, 19)]); // Keep only latest 20 updates
+      
+      // Update live stats occasionally
+      if (Math.random() > 0.7) {
+        setLiveStats(prev => ({
+          totalTravelers: prev.totalTravelers + Math.floor(Math.random() * 5),
+          activeGuides: prev.activeGuides + Math.floor(Math.random() * 3) - 1,
+          weatherAlerts: Math.max(0, prev.weatherAlerts + Math.floor(Math.random() * 3) - 1),
+          trailsOpen: prev.trailsOpen + Math.floor(Math.random() * 3) - 1
+        }));
+      }
     }, 15000);
 
     return () => clearInterval(interval);
@@ -155,10 +174,10 @@ const LiveUpdates: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-lg shadow-md p-4 mb-6"
+          className="bg-white rounded-lg shadow-md p-6 mb-6"
         >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-6 text-sm">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between space-y-4 lg:space-y-0">
+            <div className="flex flex-wrap items-center gap-6 text-sm">
               <div className="flex items-center text-green-600">
                 <Wifi className="h-4 w-4 mr-1" />
                 <span>Live Connection</span>
@@ -170,6 +189,10 @@ const LiveUpdates: React.FC = () => {
               <div className="flex items-center text-blue-600">
                 <Mountain className="h-4 w-4 mr-1" />
                 <span>{updates.length} active updates</span>
+              </div>
+              <div className="flex items-center text-purple-600">
+                <Activity className="h-4 w-4 mr-1" />
+                <span>{liveStats.totalTravelers} travelers online</span>
               </div>
             </div>
             <select
@@ -184,6 +207,51 @@ const LiveUpdates: React.FC = () => {
           </div>
         </motion.div>
 
+        {/* Live Statistics */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
+        >
+          <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-md p-4 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-blue-100 text-sm">Active Travelers</p>
+                <p className="text-2xl font-bold">{liveStats.totalTravelers.toLocaleString()}</p>
+              </div>
+              <TrendingUp className="h-8 w-8 text-blue-200" />
+            </div>
+          </div>
+          <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg shadow-md p-4 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-100 text-sm">Available Guides</p>
+                <p className="text-2xl font-bold">{liveStats.activeGuides}</p>
+              </div>
+              <Users className="h-8 w-8 text-green-200" />
+            </div>
+          </div>
+          <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-lg shadow-md p-4 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-yellow-100 text-sm">Weather Alerts</p>
+                <p className="text-2xl font-bold">{liveStats.weatherAlerts}</p>
+              </div>
+              <AlertTriangle className="h-8 w-8 text-yellow-200" />
+            </div>
+          </div>
+          <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg shadow-md p-4 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-purple-100 text-sm">Open Trails</p>
+                <p className="text-2xl font-bold">{liveStats.trailsOpen}</p>
+              </div>
+              <Zap className="h-8 w-8 text-purple-200" />
+            </div>
+          </div>
+        </motion.div>
+
         {/* Current Weather Overview */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -191,38 +259,42 @@ const LiveUpdates: React.FC = () => {
           transition={{ delay: 0.3 }}
           className="grid md:grid-cols-4 gap-4 mb-8"
         >
-          <div className="bg-white rounded-lg shadow-md p-4">
+          <div className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Kathmandu</p>
                 <p className="text-xl font-bold">22°C</p>
+                <p className="text-xs text-green-600">Clear skies</p>
               </div>
               <Cloud className="h-8 w-8 text-blue-500" />
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-md p-4">
+          <div className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Pokhara</p>
                 <p className="text-xl font-bold">18°C</p>
+                <p className="text-xs text-blue-600">Partly cloudy</p>
               </div>
               <Thermometer className="h-8 w-8 text-red-500" />
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-md p-4">
+          <div className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">EBC</p>
                 <p className="text-xl font-bold">-8°C</p>
+                <p className="text-xs text-yellow-600">Windy</p>
               </div>
               <Wind className="h-8 w-8 text-gray-500" />
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow-md p-4">
+          <div className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Chitwan</p>
                 <p className="text-xl font-bold">28°C</p>
+                <p className="text-xs text-green-600">Perfect</p>
               </div>
               <CheckCircle className="h-8 w-8 text-green-500" />
             </div>

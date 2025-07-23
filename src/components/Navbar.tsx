@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Mountain, Menu, X } from 'lucide-react';
+import { Mountain, Menu, X, User, Crown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import LoginModal from './LoginModal';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   const location = useLocation();
 
   const navItems = [
@@ -12,7 +14,8 @@ const Navbar: React.FC = () => {
     { name: 'Destinations', path: '/destinations' },
     { name: 'Culture', path: '/culture' },
     { name: 'Guides', path: '/guides' },
-    { name: 'Live Updates', path: '/updates' }
+    { name: 'Live Updates', path: '/updates' },
+    { name: 'VIP Access', path: '/special-access' }
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -38,9 +41,21 @@ const Navbar: React.FC = () => {
                     : 'text-gray-700 hover:text-red-600 hover:bg-red-50'
                 }`}
               >
+                {item.name === 'VIP Access' && (
+                  <Crown className="h-4 w-4 inline mr-1 text-yellow-500" />
+                )}
                 {item.name}
               </Link>
             ))}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsLoginOpen(true)}
+              className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+            >
+              <User className="h-4 w-4" />
+              <span>Login</span>
+            </motion.button>
           </div>
 
           {/* Mobile menu button */}
@@ -76,13 +91,30 @@ const Navbar: React.FC = () => {
                       : 'text-gray-700 hover:text-red-600 hover:bg-red-50'
                   }`}
                 >
+                  {item.name === 'VIP Access' && (
+                    <Crown className="h-4 w-4 inline mr-1 text-yellow-500" />
+                  )}
                   {item.name}
                 </Link>
               ))}
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => {
+                  setIsLoginOpen(true);
+                  setIsOpen(false);
+                }}
+                className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors mx-3 mt-2"
+              >
+                <User className="h-4 w-4" />
+                <span>Login</span>
+              </motion.button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
     </nav>
   );
 };

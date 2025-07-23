@@ -112,19 +112,57 @@ const VideoCarousel: React.FC = () => {
           transition={{ delay: 0.3, duration: 0.8 }}
           className="max-w-4xl mx-auto px-4"
         >
-          <h1 className="text-5xl md:text-7xl font-bold mb-4 text-shadow-lg">
-            Discover Nepal
-          </h1>
-          <p className="text-xl md:text-2xl mb-2 text-shadow">
+          <motion.h1 
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
+            className="text-5xl md:text-7xl font-bold mb-4 text-shadow-lg"
+          >
+            <motion.span
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.7, duration: 0.8 }}
+              className="inline-block"
+            >
+              Discover
+            </motion.span>{' '}
+            <motion.span
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.9, duration: 0.8 }}
+              className="inline-block text-red-400"
+            >
+              Nepal
+            </motion.span>
+          </motion.h1>
+          <motion.p 
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 1.1, duration: 0.8 }}
+            className="text-xl md:text-2xl mb-2 text-shadow"
+          >
             {currentItem.title}
-          </p>
-          <p className="text-lg mb-4 text-shadow">
+          </motion.p>
+          <motion.p 
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 1.3, duration: 0.8 }}
+            className="text-lg mb-4 text-shadow"
+          >
             {currentItem.description}
-          </p>
-          <div className="text-sm text-red-300 mb-8">
+          </motion.p>
+          <motion.div 
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 1.5, duration: 0.8 }}
+            className="text-sm text-red-300 mb-8"
+          >
             📍 {currentItem.location}
-          </div>
+          </motion.div>
           <motion.button
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 1.7, duration: 0.8 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-full text-lg font-semibold transition-all duration-200 shadow-lg"

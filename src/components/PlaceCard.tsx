@@ -6,9 +6,10 @@ import { Place } from '../data/places';
 interface PlaceCardProps {
   place: Place;
   index: number;
+  onDetailsClick: (place: Place) => void;
 }
 
-const PlaceCard: React.FC<PlaceCardProps> = ({ place, index }) => {
+const PlaceCard: React.FC<PlaceCardProps> = ({ place, index, onDetailsClick }) => {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'Easy': return 'text-green-600 bg-green-100';
@@ -86,6 +87,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, index }) => {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
+          onClick={() => onDetailsClick(place)}
           className="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-medium transition-colors duration-200"
         >
           Explore Details

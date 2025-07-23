@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Filter } from 'lucide-react';
 import PlaceCard from './PlaceCard';
+import PlaceModal from './PlaceModal';
 import { places } from '../data/places';
 
 const Destinations: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState('All');
   const [selectedRegion, setSelectedRegion] = useState('All');
+  const [selectedPlace, setSelectedPlace] = useState<typeof places[0] | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const difficulties = ['All', 'Easy', 'Moderate', 'Challenging'];
   const regions = ['All', ...Array.from(new Set(places.map(place => place.region)))];
@@ -20,6 +23,11 @@ const Destinations: React.FC = () => {
     
     return matchesSearch && matchesDifficulty && matchesRegion;
   });
+
+  const handleDetailsClick = (place: typeof places[0]) => {
+    setSelectedPlace(place);
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -101,7 +109,12 @@ const Destinations: React.FC = () => {
         {/* Destinations Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredPlaces.map((place, index) => (
-            <PlaceCard key={place.id} place={place} index={index} />
+            <PlaceCard 
+              key={place.id} 
+              place={place} 
+              index={index} 
+              onDetailsClick={handleDetailsClick}
+            />
           ))}
         </div>
 
@@ -116,6 +129,12 @@ const Destinations: React.FC = () => {
           </motion.div>
         )}
       </div>
+
+      <PlaceModal 
+        place={selectedPlace}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };
